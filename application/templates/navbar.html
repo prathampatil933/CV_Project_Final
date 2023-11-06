@@ -1,0 +1,50 @@
+<nav class="navbar nav navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <!--   <a
+      class="navbar-brand"
+      href="#"
+      style="font-size: medium; font-weight: bold"
+    >
+    <img
+        src="{{url_for('static', filename='Images/logowhitetrans.png')}}"
+        alt="Logo"
+        width="30"
+        height="30"
+        class="d-inline-block"
+      />  -->
+      Image Editor
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav" style="color: white">
+      <ul class="navbar-nav nav-pills">
+        <li class="nav-item navback">
+          <a class="nav-link" aria-current="page" href="/">Profile</a>
+        </li>
+        <li class="nav-item navback">
+          <a class="nav-link" href="/">Settings</a>
+        </li>
+        <!-- <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled">Disabled</a>
+                </li> -->
+        <li class="nav-item navback" style="position: absolute; left: 90%">
+          {% if session['isLoggedin'] %}
+          <a class="nav-link" href="/logout">Logout</a>
+          {% endif %}
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

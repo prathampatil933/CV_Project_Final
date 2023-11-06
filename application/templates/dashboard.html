@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link
+      href="{{ url_for('static', filename = 'style.css') }}"
+      rel="stylesheet"
+    />
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    {% include 'navbar.html' %}
+
+    <div class="row justify-content-start">
+      <div class="col-7">
+        <div
+          class="container"
+          style="display: flex; justify-content: center; align-items: center;
+              width: 60%;
+              margin: auto;
+              position: absolute;
+              top: 7vh;
+              transform: translate(0, -50%)
+          } "
+        >
+          <img
+            id="img"
+            src="data:image/jpeg;base64,{{ img_data }}"
+            style="width: 80%; height: auto; margin-top: 50px"
+          />
+        </div>
+      </div>
+      <div class="col-5" style="max-height: 90vh; overflow-y: scroll">
+        <!-- All cards -->
+        <div class="row justify-content-evenly">
+          <!-- First card -->
+          <div class="col-6">
+            <div class="card" style="width: 300px; height: 300px">
+              <div class="card-body">
+                <h5 class="card-title">Crop the image</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  Enter the x & y co-ordinates:
+                </h6>
+
+                <div class="row justify-content-evenly">
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="x1"
+                      placeholder="X1"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="y1"
+                      placeholder="Y1"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="x2"
+                      placeholder="X2"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="y2"
+                      placeholder="Y2"
+                    />
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <button type="button" class="btn btn-primary mb-3" id="crop">
+                    Crop
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card" style="width: 300px; height: 300px">
+              <div class="card-body">
+                <h5 class="card-title">Resize the image</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  Enter new width and height:
+                </h6>
+
+                <div class="row justify-content-evenly">
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="width"
+                      placeholder="Width"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="height"
+                      placeholder="Height"
+                    />
+                  </div>
+                  <div class="col-12">
+                    <label for="interpolationmethod" class="form-label"
+                      >Select a interpolation method</label
+                    >
+                    <select class="form-control" id="interpolationmethod">
+                      <option value="1">1. Nearest Neighbour</option>
+                      <option value="2">2. Bilinear"</option>
+                      <option value="3">3. Bicubic</option>
+                    </select>
+                  </div>
+                  <div class="col-12" style="margin-top: 10px">
+                    <button
+                      type="button"
+                      class="btn btn-primary mb-3"
+                      id="resize"
+                    >
+                      Resize
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card" style="width: 300px; height: 300px">
+              <div class="card-body">
+                <h5 class="card-title">Rotate the image</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  Enter the rotation angle in degrees (positive for clockwise,
+                  negative for counterclockwise):
+                </h6>
+
+                <div class="row justify-content-evenly">
+                  <div class="col-12">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="angle"
+                      placeholder="Angle"
+                    />
+                  </div>
+
+                  <div class="col-12" style="margin-top: 10px">
+                    <button
+                      type="button"
+                      class="btn btn-primary mb-3"
+                      id="rotate"
+                    >
+                      Rotate
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card" style="width: 300px; height: 300px">
+              <div class="card-body">
+                <h5 class="card-title">Flip the image</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  Select direction for flip:
+                </h6>
+
+                <div class="col-12" style="margin-top: 10px">
+                  <select class="form-control" id="flip_dir">
+                    <option value="h">Horizontal Flip</option>
+                    <option value="v">Vertical Flip"</option>
+                    <option value="none">None</option>
+                  </select>
+                </div>
+
+                <div class="col-12" style="margin-top: 10px">
+                  <button type="button" class="btn btn-primary mb-3" id="flip">
+                    Flip
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="card" style="width: 300px; height: 300px">
+              <div class="card-body">
+                <h5 class="card-title">Adjust or Enhance the image</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  Enter brightness factor and contrast factor
+                </h6>
+
+                <div class="row justify-content-evenly">
+                  <div class="col-12">
+                    <label for="brightness" class="form-label"
+                      >1.0 for no change:</label
+                    >
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="brightness"
+                      placeholder="Brightness"
+                    />
+                  </div>
+
+                  <div class="col-12">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="contrast"
+                      placeholder="Contrast"
+                    />
+                  </div>
+
+                  <div class="col-12">
+                    <button
+                      type="button"
+                      class="btn btn-primary mb-3"
+                      id="adjustenhance"
+                    >
+                      Adjust
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="card" style="width: 300px; height: 300px">
+              <div class="card-body">
+                <h5 class="card-title">Adjust color of the image</h5>
+                <h6 class="card-subtitle mb-2 text-muted"></h6>
+
+                <div class="row justify-content-evenly">
+                  <div class="col-12">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="hue"
+                      placeholder="Hue (0-179)"
+                    />
+                  </div>
+
+                  <div class="col-12">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="saturation"
+                      placeholder="Saturation (-255 to 255)"
+                    />
+                  </div>
+
+                  <div class="col-12">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="brightness"
+                      placeholder="Brightness (-255 to 255)"
+                    />
+                  </div>
+
+                  <div class="col-12">
+                    <button
+                      type="button"
+                      class="btn btn-primary mb-3"
+                      id="coloradjustment"
+                    >
+                      Adjust Color
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="card" style="width: 300px; height: 300px">
+              <div class="card-body">
+                <h5 class="card-title">Sharpen or Blurr the image</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Select a filter:</h6>
+
+                <div class="col-12" style="margin-top: 10px">
+                  <select class="form-control" id="filter">
+                    <option value="sharpening">Sharpening</option>
+                    <option value="blurring">Blurring"</option>
+                  </select>
+                </div>
+
+                <div class="col-12" style="margin-top: 10px">
+                  <button
+                    type="button"
+                    class="btn btn-primary mb-3"
+                    id="sharpblurr"
+                  >
+                    Sharpen or Blurr
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="card" style="width: 300px; height: 300px">
+              <div class="card-body">
+                <h5 class="card-title">Reduce noise</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  Select noise reduction technique:
+                </h6>
+
+                <div class="col-12" style="margin-top: 10px">
+                  <select class="form-control" id="technique">
+                    <option value="1">Median Filtering</option>
+                    <option value="2">Bilateral Filtering"</option>
+                    <option value="3">Wavelet Denoising"</option>
+                  </select>
+                </div>
+
+                <div class="col-12" style="margin-top: 10px">
+                  <button
+                    type="button"
+                    class="btn btn-primary mb-3"
+                    id="noisereduction"
+                  >
+                    Reduce Noise
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="card" style="width: 300px; height: 300px">
+              <div class="card-body">
+                <h5 class="card-title">Cloning and Healing</h5>
+                <h6 class="card-subtitle mb-2 text-muted"></h6>
+
+                <div class="col-6" style="margin-top: 10px">
+                  <select class="form-control" id="choice">
+                    <option value="1">Select</option>
+                    <option value="1">Clone an area</option>
+                    <option value="2">Heal an area"</option>
+                  </select>
+                </div>
+
+                <div class="row justify-content-evenly">
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="x1"
+                      placeholder="X1"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="y1"
+                      placeholder="Y1"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="x2"
+                      placeholder="X2"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="y2"
+                      placeholder="Y2"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <button
+                    type="button"
+                    class="btn btn-primary mb-3"
+                    id="cloneheal"
+                  >
+                    Clone or Heal
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="card" style="width: 300px; height: 300px">
+              <div class="card-body">
+                <h5 class="card-title">Layering and Masking</h5>
+                <h6 class="card-subtitle mb-2 text-muted"></h6>
+
+                <div class="col-6">
+                  <button
+                    type="button"
+                    class="btn btn-primary mb-3"
+                    id="layermask"
+                  >
+                    Layer and Mask
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="card" style="width: 300px; height: 300px">
+              <div class="card-body">
+                <h5 class="card-title">Textbox</h5>
+                <h6 class="card-subtitle mb-2 text-muted"></h6>
+
+                <div class="row justify-content-evenly">
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="text"
+                      placeholder="Text"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="fontsize"
+                      placeholder="Font Size"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="textcolor"
+                      placeholder="Text Color"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="X"
+                      placeholder="X"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <input
+                      class="theme form-control"
+                      type="text"
+                      id="Y"
+                      placeholder="Y"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <button
+                    type="button"
+                    class="btn btn-primary mb-3"
+                    id="textbox"
+                  >
+                    Textbox
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("crop").addEventListener("click", function () {
+        const x1 = document.getElementById("x1").value;
+        const y1 = document.getElementById("y1").value;
+        const x2 = document.getElementById("x2").value;
+        const y2 = document.getElementById("y2").value;
+        var imgSrc = document.getElementById("img").src;
+        console.log(x1);
+        console.log(y1);
+        console.log(x2);
+        console.log(y2);
+
+        fetch("/cropfun", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            x1: x1,
+            y1: y1,
+            x2: x2,
+            y2: y2,
+            img_data: imgSrc,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            var img = data.img_data;
+            document.getElementById("img").src =
+              "data:image/jpeg;base64," + img;
+          });
+      });
+
+      document.getElementById("resize").addEventListener("click", function () {
+        const width = document.getElementById("width").value;
+        const height = document.getElementById("height").value;
+        const interpolationmethod = document.getElementById(
+          "interpolationmethod"
+        ).value;
+        var imgSrc = document.getElementById("img").src;
+
+        fetch("/resize", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            width: width,
+            height: height,
+            method: interpolationmethod,
+            img_data: imgSrc,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            var img = data.img_data;
+            document.getElementById("img").src =
+              "data:image/jpeg;base64," + img;
+          });
+      });
+
+      document.getElementById("rotate").addEventListener("click", function () {
+        const angle = document.getElementById("angle").value;
+        var imgSrc = document.getElementById("img").src;
+
+        fetch("/rotate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            angle: angle,
+            img_data: imgSrc,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            var img = data.img_data;
+            document.getElementById("img").src =
+              "data:image/jpeg;base64," + img;
+          });
+      });
+
+      document.getElementById("flip").addEventListener("click", function () {
+        const flip_dir = document.getElementById("flip_dir").value;
+        var imgSrc = document.getElementById("img").src;
+
+        fetch("/flip", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            flip_dir: flip_dir,
+            img_data: imgSrc,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            var img = data.img_data;
+            document.getElementById("img").src =
+              "data:image/jpeg;base64," + img;
+          });
+      });
+
+      document
+        .getElementById("adjustenhance")
+        .addEventListener("click", function () {
+          const brightness = document.getElementById("brightness").value;
+          const contrast = document.getElementById("contrast").value;
+          var imgSrc = document.getElementById("img").src;
+
+          fetch("/adjustenhance", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              brightness: brightness,
+              contrast: contrast,
+              img_data: imgSrc,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              var img = data.img_data;
+              document.getElementById("img").src =
+                "data:image/jpeg;base64," + img;
+            });
+        });
+
+      document
+        .getElementById("coloradjustment")
+        .addEventListener("click", function () {
+          const hue = document.getElementById("hue").value;
+          const saturation = document.getElementById("saturation").value;
+          const brightness = document.getElementById("brightness").value;
+          var imgSrc = document.getElementById("img").src;
+
+          fetch("/coloradjustment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              hue: hue,
+              saturation: saturation,
+              brightness: brightness,
+              img_data: imgSrc,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              var img = data.img_data;
+              document.getElementById("img").src =
+                "data:image/jpeg;base64," + img;
+            });
+        });
+
+      document
+        .getElementById("sharpblurr")
+        .addEventListener("click", function () {
+          const filter = document.getElementById("filter").value;
+          var imgSrc = document.getElementById("img").src;
+
+          fetch("/sharpblurr", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              filter: filter,
+              img_data: imgSrc,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              var img = data.img_data;
+              document.getElementById("img").src =
+                "data:image/jpeg;base64," + img;
+            });
+        });
+
+      document
+        .getElementById("noisereduction")
+        .addEventListener("click", function () {
+          const technique = document.getElementById("technique").value;
+          var imgSrc = document.getElementById("img").src;
+
+          fetch("/noisereduction", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              technique: technique,
+              img_data: imgSrc,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              var img = data.img_data;
+              document.getElementById("img").src =
+                "data:image/jpeg;base64," + img;
+            });
+        });
+
+      document
+        .getElementById("cloneheal")
+        .addEventListener("click", function () {
+          const choice = document.getElementById("choice").value;
+          const x1 = document.getElementById("x1").value;
+          const y1 = document.getElementById("y1").value;
+          const x2 = document.getElementById("x2").value;
+          const y2 = document.getElementById("y2").value;
+          var imgSrc = document.getElementById("img").src;
+
+          fetch("/cloneheal", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              x1: x1,
+              y1: y1,
+              x2: x2,
+              y2: y2,
+              choice: choice,
+              img_data: imgSrc,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              var img = data.img_data;
+              document.getElementById("img").src =
+                "data:image/jpeg;base64," + img;
+            });
+        });
+
+      document.getElementById("textbox").addEventListener("click", function () {
+        const text = document.getElementById("text").value;
+        const fontsize = document.getElementById("fontsize").value;
+        const textcolor = document.getElementById("textcolor").value;
+        const x = document.getElementById("x").value;
+        const y = document.getElementById("y").value;
+        var imgSrc = document.getElementById("img").src;
+
+        fetch("/textbox", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: text,
+            fontsize: fontsize,
+            textcolor: textcolor,
+            x: x,
+            y: y,
+            img_data: imgSrc,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            var img = data.img_data;
+            document.getElementById("img").src =
+              "data:image/jpeg;base64," + img;
+          });
+      });
+    </script>
+  </body>
+</html>
